@@ -1,0 +1,76 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFSRestTool", "TFSRestTool\TFSRestTool.csproj", "{783DCCBC-8A8B-4A47-9CB6-6317DC1676CD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6AB4E37D-4913-4E35-975F-847E29340BC4}"
+	ProjectSection(SolutionItems) = preProject
+		build.bat = build.bat
+		clean.bat = clean.bat
+		extension-icon128.png = extension-icon128.png
+		vss-extension.json = vss-extension.json
+		xcopy1.excl = xcopy1.excl
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RunNunitWithOpenCover", "RunNunitWithOpenCover", "{1BC2C287-01A6-41D4-88D9-8D9049047ADC}"
+	ProjectSection(SolutionItems) = preProject
+		RunNunitWithOpenCover\icon.png = RunNunitWithOpenCover\icon.png
+		RunNunitWithOpenCover\ResultDummy.xml = RunNunitWithOpenCover\ResultDummy.xml
+		RunNunitWithOpenCover\RunOpenCover.ps1 = RunNunitWithOpenCover\RunOpenCover.ps1
+		RunNunitWithOpenCover\task.json = RunNunitWithOpenCover\task.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildResultsEnhancer", "BuildResultsEnhancer", "{943116C1-A8A5-4D3F-AE0E-4DC515D0C46D}"
+	ProjectSection(SolutionItems) = preProject
+		BuildResultsEnhancer\bower.json = BuildResultsEnhancer\bower.json
+		BuildResultsEnhancer\infoTab.html = BuildResultsEnhancer\infoTab.html
+		BuildResultsEnhancer\statusSection.html = BuildResultsEnhancer\statusSection.html
+		BuildResultsEnhancer\tsconfig.json = BuildResultsEnhancer\tsconfig.json
+		BuildResultsEnhancer\typings.json = BuildResultsEnhancer\typings.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EA4C2B05-4B0E-4910-A875-3FD28CB278FF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "enhancer", "enhancer", "{0B205C87-842D-4F23-A862-4B44FB4B2B7D}"
+	ProjectSection(SolutionItems) = preProject
+		BuildResultsEnhancer\src\enhancer\common.ts = BuildResultsEnhancer\src\enhancer\common.ts
+		BuildResultsEnhancer\src\enhancer\status.ts = BuildResultsEnhancer\src\enhancer\status.ts
+		BuildResultsEnhancer\src\enhancer\tab.ts = BuildResultsEnhancer\src\enhancer\tab.ts
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{C21291EA-49EE-4A4B-AB88-748A02A0A419}"
+	ProjectSection(SolutionItems) = preProject
+		BuildResultsEnhancer\images\fail.jpg = BuildResultsEnhancer\images\fail.jpg
+		BuildResultsEnhancer\images\none.jpg = BuildResultsEnhancer\images\none.jpg
+		BuildResultsEnhancer\images\running.jpg = BuildResultsEnhancer\images\running.jpg
+		BuildResultsEnhancer\images\success.jpg = BuildResultsEnhancer\images\success.jpg
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "css", "css", "{06A82807-2A53-4006-9158-2DF67C76AC66}"
+	ProjectSection(SolutionItems) = preProject
+		BuildResultsEnhancer\css\main.css = BuildResultsEnhancer\css\main.css
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{783DCCBC-8A8B-4A47-9CB6-6317DC1676CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{783DCCBC-8A8B-4A47-9CB6-6317DC1676CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{783DCCBC-8A8B-4A47-9CB6-6317DC1676CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{783DCCBC-8A8B-4A47-9CB6-6317DC1676CD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EA4C2B05-4B0E-4910-A875-3FD28CB278FF} = {943116C1-A8A5-4D3F-AE0E-4DC515D0C46D}
+		{0B205C87-842D-4F23-A862-4B44FB4B2B7D} = {EA4C2B05-4B0E-4910-A875-3FD28CB278FF}
+		{C21291EA-49EE-4A4B-AB88-748A02A0A419} = {943116C1-A8A5-4D3F-AE0E-4DC515D0C46D}
+		{06A82807-2A53-4006-9158-2DF67C76AC66} = {943116C1-A8A5-4D3F-AE0E-4DC515D0C46D}
+	EndGlobalSection
+EndGlobal

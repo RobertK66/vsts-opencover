@@ -1,0 +1,94 @@
+{
+  "manifestVersion": 1,
+  "id": "coverage-build-tasks",
+  "name": "RKOS Build Tools",
+  "version": "0.0.1",
+  "publisher": "RKOS",
+  "targets": [
+    {
+      "id": "Microsoft.VisualStudio.Services"
+    }
+  ],
+  "description": "Tools for running and publishing OpenCover tests.",
+  "categories": [
+    "Build and release"
+  ],
+  "scopes": [ "vso.build", "vso.test" ],
+  "icons": {
+    "default": "extension-icon128.png"
+  },
+  "files": [
+    {
+      "path": "RunNunitWithOpenCover/dist"
+    },
+    {
+      "path": "RunNunitWithOpenCover/task.json"
+    },
+    {
+      "path": "RunNunitWithOpenCover/icon.png"
+    },
+    {
+      "path": "RunNunitWithOpenCover/RunOpenCover.ps1"
+    },
+
+    {
+      "path": "BuildResultsEnhancer/images",
+      "addressable": true
+    },
+    {
+      "path": "BuildResultsEnhancer/dist",
+      "addressable": true
+    },
+    {
+      "path": "BuildResultsEnhancer/infoTab.html",
+      "addressable": true
+    },
+    {
+      "path": "BuildResultsEnhancer/statusSection.html",
+      "addressable": true
+    },
+    {
+      "path": "BuildResultsEnhancer/bower_components/vss-web-extension-sdk/lib/VSS.SDK.min.js",
+      "addressable": true
+    }
+  ],
+  "contributions": [
+    {
+      "id": "rkos-run-nunit-opencover-task",
+      "type": "ms.vss-distributed-task.task",
+      "targets": [
+        "ms.vss-distributed-task.tasks"
+      ],
+      "properties": {
+        "name": "RunNunitWithOpenCover"
+      }
+    },
+    {
+      "id": "build-info-tab",
+      "type": "ms.vss-build-web.build-results-tab",
+      "description": "A tab contributing to build results view",
+      "targets": [
+        "ms.vss-build-web.build-results-view"
+      ],
+      "properties": {
+        "name": "OpenCover",
+        "uri": "BuildResultsEnhancer/infoTab.html",
+        "order": 1
+      }
+    },
+    {
+      "id": "build-status-section",
+      "type": "ms.vss-build-web.build-results-section",
+      "description": "A section contributing to our own new tab and also to existing build 'summary' tab",
+      "targets": [
+        "ms.vss-build-web.build-results-summary-tab"
+      ],
+      "properties": {
+        "name": "OpenCoverage Summary",
+        "uri": "BuildResultsEnhancer/statusSection.html",
+        "order": 10,
+        "height": 40
+      }
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="bower_components/vss-web-extension-sdk/lib/VSS.SDK.min.js"></script>
+    
+    <script type="text/javascript">
+        VSS.init( { 
+            usePlatformScripts: true, 
+            moduleLoaderConfig: { 
+                paths: { "enhancer": "BuildResultsEnhancer/dist/enhancer" } 
+            } 
+        });
+        
+        VSS.ready(function() {
+            require(["enhancer/status"], function () { });
+            require(["enhancer/common"], function () { });
+        });        
+    </script>
+
+    <style>
+        #robert-status-root td {
+             padding: 0.1em
+        }
+        #robert-cov-seq, #robert-cov-bra {
+           font-weight: bold;
+           text-align: right;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div class="build-status">
+        <table>
+            <tr><td>Sequence Coverage:</td><td id="robert-cov-seq"></td></tr>
+            <tr><td>Branch Coverage:</td><td id="robert-cov-bra"></td></tr>
+        </table>
+    </div>  
+</body>
+</html>
