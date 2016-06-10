@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		build.bat = build.bat
 		clean.bat = clean.bat
 		extension-icon128.png = extension-icon128.png
+		..\README.md = ..\README.md
 		vss-extension.json = vss-extension.json
 		xcopy1.excl = xcopy1.excl
 	EndProjectSection
@@ -51,6 +52,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "css", "css", "{06A82807-2A53-4006-9158-2DF67C76AC66}"
 	ProjectSection(SolutionItems) = preProject
 		BuildResultsEnhancer\css\main.css = BuildResultsEnhancer\css\main.css
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{AABA56E8-691A-41DD-96E8-FD6DB8D65CF2}"
+	ProjectSection(SolutionItems) = preProject
+		..\docs\build.md = ..\docs\build.md
+		..\docs\usage.md = ..\docs\usage.md
 	EndProjectSection
 EndProject
 Global
