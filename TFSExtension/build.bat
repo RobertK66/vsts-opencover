@@ -1,5 +1,10 @@
 echo Build.Bat called. All extensions are build with typescript and tfx tools....
+if "%1"=="" goto blank
+cd %1%/BuildResultsEnhancer
+goto start
+:blank
 cd BuildResultsEnhancer
+:start
 echo Building BuildResultsEnhancer
 call bower install
 call typings install
