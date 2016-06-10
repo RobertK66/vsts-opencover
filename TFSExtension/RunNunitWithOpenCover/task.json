@@ -1,0 +1,100 @@
+{
+  "id": "9F56F6BE-1D7E-4940-86A8-DB552C7ABF50",
+  "name": "RunNunitWithOpenCover",
+  "friendlyName": "Runs Nunit Test with OpenCover",
+  "description": "Runs Nunit tests using OpenCover command line and nunit3 consolen runner to generate coverage report.",
+  "helpMarkDown": "",
+  "category": "Test",
+  "visibility": [
+    "Build",
+    "Release"
+  ],
+  "author": "RKOS",
+  "version": {
+    "Major": 0,
+    "Minor": 0,
+    "Patch": 2
+  },
+  "demands": [
+    "Cmd"
+  ],
+  "minimumAgentVersion": "1.83.0",
+  "groups": [
+    {
+      "name": "output",
+      "displayName": "Output Options",
+      "isExpanded": true
+    },
+    {
+      "name": "credentials",
+      "displayName": "TFS Credentials",
+      "isExpanded": true
+    }
+  ],
+  "inputs": [
+    {
+      "name": "testassembly",
+      "type": "string",
+      "label": "Testassembly",
+      "defaultValue": "**\\*test*.dll;-:**\\obj\\**",
+      "required": true,
+      "helpMarkDown": "specifieys dlls to be run by nunit console runnner."
+    },
+    {
+      "name": "registerOption",
+      "type": "pickList",
+      "label": "Register Option",
+      "defaultValue": "Path32",
+      "required": true,
+      "helpMarkDown": "Specify the -register Option for OpenCover call.",
+      "options": {
+        "Path32": "'Path32' uses local 32bit version of opencover service dll without registry.",
+        "Path64": "'Path64'uses local 64bit version of opencover service dll without registry.",
+        "User": "'User' registers the service dll(s) for running User Acount (BuildAgent User)."
+      }
+    },
+    {
+      "name": "coverageFilter",
+      "type": "string",
+      "label": "Coverage Filter",
+      "defaultValue": "+[MyNamespace]*",
+      "required": true,
+      "helpMarkDown": "Specifies the Domain/Classes to be analyzed with Coverage Data (e.g.:'+[MyNamespace]*')."
+    },
+    {
+      "name": "generateReport",
+      "type": "boolean",
+      "label": "Generate Report",
+      "defaultValue": "true",
+      "required": true,
+      "helpMarkDown": "If this is true, the Coverage result is used to generate HTML Report as Build Artefact.",
+      "groupName": "output"
+    },
+    {
+      "name": "tfsUser",
+      "type": "string",
+      "label": "TFS User",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "An User Account with access rights to TFS REST API is needed.",
+      "groupName": "credentials"
+    },
+    {
+      "name": "tfsPwd",
+      "type": "string",
+      "label": "TFS USers Password",
+      "defaultValue": "$(TfsSecretPassword)",
+      "required": true,
+      "helpMarkDown": "The Passsword for the TFS User. Its better to keep default value here and enter the 'TfsSecretPassword' as hidden variable in the Build Variables Section.",
+      "groupName": "credentials"
+    }
+  ],
+  "instanceNameFormat": "RunOpenCover with script $(filename)",
+  "execution": {
+    "PowerShell": {
+      "target": "$(currentDirectory)\\RunOpenCover.ps1",
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)"
+    }
+  }
+}

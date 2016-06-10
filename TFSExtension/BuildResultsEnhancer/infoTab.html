@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html  style="overflow:scroll">
+<head>
+    <script src="bower_components/vss-web-extension-sdk/lib/VSS.SDK.min.js"></script>
+    
+    <script type="text/javascript">
+        VSS.init( { 
+            usePlatformScripts: true, 
+            moduleLoaderConfig: { 
+                paths: { "enhancer": "BuildResultsEnhancer/dist/enhancer" } 
+            } 
+        });
+        
+        VSS.ready(function() {
+            require(["enhancer/tab"], function () { });
+            require(["enhancer/common"], function () { });
+        });   
+    </script>
+    
+    <style>
+    .build-info {
+        padding: 10px;
+    }     
+    </style>
+</head>
+
+<body >
+    <div class="build-info">
+        <pre id="roberts-info-container"></pre>
+    </div>
+</body>
+</html>
