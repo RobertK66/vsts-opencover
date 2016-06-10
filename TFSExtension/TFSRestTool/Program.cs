@@ -16,6 +16,10 @@ namespace TFSRestTool {
                 Console.WriteLine("The build of the TFS Extension vsxi file is triggered by calling build.bat in soultion root.");
                 Console.WriteLine("Toolchain 'node.js' - 'bower' - 'typings' - 'typescript'(tsc) must be installed and be globally available.");
                 Console.WriteLine("When successfull the result .vsxi can be found in <Solution>/bin. ");
+                Console.WriteLine();
+                Console.WriteLine("Additionaly - if called with parameters - this CommandLine exe is now used as REST-Helper for the powershell build step.");
+                Console.WriteLine("Its a workaround until I find a better way to load result infos to the server.");
+
                 Console.ReadLine();
             }
         }
