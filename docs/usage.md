@@ -1,6 +1,6 @@
 ## How to use it ...
 
-See this instructions how to upload the .vsxi file to yout Team Foundation Server.
+See this instructions how to upload the .vsix file to yout Team Foundation Server.
 https://www.visualstudio.com/en-us/docs/marketplace/get-tfs-extensions?href=%22#upload
 
 Find and use the build step "Runs Nunit Test with OpenCover" in under section "Test".
