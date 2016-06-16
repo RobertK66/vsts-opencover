@@ -18,6 +18,7 @@ export class OpenCoverResult extends Object {
     public classes: string;
     public visitedMethods: string;
     public methods: string;
+    public $trackedModules: JQuery;
 
     constructor(buffer: ArrayBuffer) {
         super();
@@ -25,20 +26,23 @@ export class OpenCoverResult extends Object {
         var cont = String.fromCharCode.apply(null, new Uint8Array(buffer));
         this.resdoc = $.parseXML(cont);
         var $xml = $(this.resdoc);
-        this.sequenceCoverage = $xml.find("Summary").attr("sequenceCoverage");
-        this.visitedSequencePoints = $xml.find("Summary").attr("visitedSequencePoints");
-        this.sequencePoints = $xml.find("Summary").attr("numSequencePoints");
+        var $Summary = $xml.find("Summary");
+        this.sequenceCoverage = $Summary.attr("sequenceCoverage");
+        this.visitedSequencePoints = $Summary.attr("visitedSequencePoints");
+        this.sequencePoints = $Summary.attr("numSequencePoints");
 
-        this.branchCoverage = $xml.find("Summary").attr("branchCoverage");
-        this.visitedBranchPoints = $xml.find("Summary").attr("visitedBranchPoints");
-        this.branchPoints = $xml.find("Summary").attr("numBranchPoints");
+        this.branchCoverage = $Summary.attr("branchCoverage");
+        this.visitedBranchPoints = $Summary.attr("visitedBranchPoints");
+        this.branchPoints = $Summary.attr("numBranchPoints");
 
-        this.minCyclomaticComplexity = $xml.find("Summary").attr("minCyclomaticComplexity");
-        this.maxCyclomaticComplexity = $xml.find("Summary").attr("maxCyclomaticComplexity");
-        this.visitedClasses = $xml.find("Summary").attr("visitedClasses");
-        this.visitedMethods = $xml.find("Summary").attr("visitedMethods");
-        this.classes = $xml.find("Summary").attr("numClasses");
-        this.methods = $xml.find("Summary").attr("numMethods");
+        this.minCyclomaticComplexity = $Summary.attr("minCyclomaticComplexity");
+        this.maxCyclomaticComplexity = $Summary.attr("maxCyclomaticComplexity");
+        this.visitedClasses = $Summary.attr("visitedClasses");
+        this.visitedMethods = $Summary.attr("visitedMethods");
+        this.classes = $Summary.attr("numClasses");
+        this.methods = $Summary.attr("numMethods");
+
+        this.$trackedModules = $xml.find("Module").not("[skippedDueTo]");
     }
 
     public doSomethingElse(): string {
@@ -48,7 +52,6 @@ export class OpenCoverResult extends Object {
 
 
 }
-
 
 export class CustomTestRunAttachment extends Object {
     private tagPrefix: string = "traid_";
@@ -65,7 +68,7 @@ export class CustomTestRunAttachment extends Object {
         });
     }
 
-    public getTestRunsAsync(callback: any): void {
+    public getTestRunsAttachment(callback: (buffer: ArrayBuffer)=>void): void {
         var testrunid;
         var tc = TFSTestMgmtClient.getClient();
 

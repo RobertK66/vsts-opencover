@@ -1,6 +1,8 @@
 /// <reference path='../../typings/main.d.ts' />
 
 import Controls = require("VSS/Controls");
+import Grids = require("VSS/Controls/Grids");
+
 import TFS_BuildContracts = require("TFS/Build/Contracts");
 import TFS_BuildContractsExt = require("TFS/Build/ExtensionContracts");
 
@@ -12,7 +14,7 @@ import MyCommon = require("enhancer/common");
 //import VSS_FileContainerServices = require("VSS/FileContainer/Services");
 //import VSS_FileContainerClient = require("VSS/FileContainer/RestClient");
 //import VSS_AtefactServices = require("VSS/Artifacts/Constants");
-    
+
 
 
 //import TFSBuildClient = require("TFS/Build/RestClient");
@@ -169,24 +171,80 @@ import MyCommon = require("enhancer/common");
 	 "VSS/WebApi/RestClient" {
 */
 
-export class InfoTab extends Controls.BaseControl {	
-	constructor() {
+
+export class InfoTab extends Controls.BaseControl {
+    constructor() {
         super();
-	}
-		
-	public initialize(): void {
+    }
+
+    public initialize(): void {
         super.initialize();
 
-		// Get configuration that's shared between extension and the extension host
+        // Get configuration that's shared between extension and the extension host
         var sharedConfig: TFS_BuildContractsExt.IBuildResultsViewExtensionConfig = VSS.getConfiguration();
-        
- 		if(sharedConfig) {
-			// register your extension with host through callback
-			sharedConfig.onBuildChanged((build: TFS_BuildContracts.Build) => {
-                this._initBuildInfo(build);	
+
+
+
+        if (sharedConfig) {
+            // register your extension with host through callback
+            sharedConfig.onBuildChanged((build: TFS_BuildContracts.Build) => {
+                this._initBuildInfo(build);
+
+
+                // Initialize a grid control with two colums, "key" and "value"
+                var root: Grids.IGridHierarchyItem[] = [
+                    { id: "001", name: "Baking" },
+                    {
+                        id: "002", name: "Beverages", children: [
+                            { id: "003", name: "Coffee" },
+                            {
+                                id: "004", name: "Tea", collapsed: true, children: [
+                                    { id: "005", name: "Green Tea" },
+                                    { id: "006", name: "Black Tea" },
+                                    { id: "007", name: "Herbal Tea" },
+                                    { id: "008", name: "Fruit Tea" },
+                                    { id: "009", name: "Decaffeinated" }
+                                ]
+                            },
+                            { id: "010", name: "Water" },
+                            { id: "011", name: "Hot Cocoa" },
+                            {
+                                id: "012", name: "Sports & Energy Drinks", children: [
+                                    { id: "013", name: "Liquids" },
+                                    { id: "014", name: "Energy" },
+                                    { id: "015", name: "Specialty" },
+                                    { id: "016", name: "Other" }
+                                ]
+                            },
+                            { id: "017", name: "Soft Drinks" }
+                        ]
+                    },
+                    { id: "018", name: "Frozen Foods" },
+                    { id: "019", name: "Candy" }
+                ];
+
+
+      
+                var gridOptions: Grids.IGridOptions = {
+                    height: "600px",
+                    width: "450px",
+                    columns: [
+                        { text: "Id", index: "id", width: 60 },
+                        { text: "Product Name", index: "name", width: 200, indent: true }
+                    ]
+                };
+                
+                var myGrid = Controls.create(Grids.Grid, $("#grid-container"), gridOptions);
+
+                var dataSource = new Grids.GridHierarchySource(root);
+                myGrid.setDataSource(dataSource);
+
+
+
+
 
                 var ctra = new MyCommon.CustomTestRunAttachment(build);
-                ctra.getTestRunsAsync((ab) => {
+                ctra.getTestRunsAttachment((ab) => {
                     var openCoverResult = new MyCommon.OpenCoverResult(ab);
 
                     var inf: string = "";
@@ -196,7 +254,7 @@ export class InfoTab extends Controls.BaseControl {
                     inf += "Branch Coverage:   " + openCoverResult.branchCoverage + "%"
                         + " (" + openCoverResult.visitedBranchPoints
                         + "/" + openCoverResult.branchPoints + ")\n\n"
-                    
+
                     inf += "Min Cyclomatic Complexity: " + openCoverResult.minCyclomaticComplexity + "\n";
                     inf += "Max Cyclomatic Complexity: " + openCoverResult.maxCyclomaticComplexity + "\n";
                     inf += "Classes visited/monitored: " + openCoverResult.visitedClasses
@@ -205,19 +263,37 @@ export class InfoTab extends Controls.BaseControl {
                         + "/" + openCoverResult.methods + "\n";
 
                     $('#roberts-info-container').text(inf);
+
+                    //openCoverResult.$trackedModules.each( (ix, module) => {
+                    //    var name = $(module).find("ModuleName").text();
+                    //    var bc = $(module).find("Summary").attr("branchCoverage");
+                    //    var sc = $(module).find("Summary").attr("sequenceCoverage");
+                    //    dataSource.push({ modname: name, seqCov: sc, brCov: bc  });
+                    //});
+
+                    //dataSource.push({ modname: "---", value: "-vvv--" });
+
+                  
+                    //dataSource.push({
+                    //    modname: "---", seqCov: "seq Cov", brCov: " br cov",
+                    //    children: child
+                    //});
+
+
+                    //myGrid.redraw();
+                    //myGrid.setDataSource(;
+                    
+                    //myGrid.expandAll();
                 });
-			});
-		}		
-	}
-	
+            });
+        }
+    }
+
     private _initBuildInfo(build: TFS_BuildContracts.Build) {
-		
-	}
+
+    }
 }
 
 InfoTab.enhance(InfoTab, $(".build-info"), {});
 
-// Notify the parent frame that the host has been loaded
 VSS.notifyLoadSucceeded();
-
-	
