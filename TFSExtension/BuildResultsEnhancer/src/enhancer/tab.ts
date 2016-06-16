@@ -184,6 +184,18 @@ export class InfoTab extends Controls.BaseControl {
         var sharedConfig: TFS_BuildContractsExt.IBuildResultsViewExtensionConfig = VSS.getConfiguration();
 
 
+        var gridOptions: Grids.IGridOptions = {
+            height: "600px",
+            // width: "450px",
+            columns: [
+                { text: "Type", index: "restype", width: 60 },
+                { text: "Name", index: "name", width: 300 },
+                { text: "Seq Coverage", index: "seqCov", width: 80 }
+
+            ]
+        };
+
+        var myGrid = Controls.create(Grids.Grid, $("#grid-container"), gridOptions);
 
         if (sharedConfig) {
             // register your extension with host through callback
@@ -191,57 +203,7 @@ export class InfoTab extends Controls.BaseControl {
                 this._initBuildInfo(build);
 
 
-                // Initialize a grid control with two colums, "key" and "value"
-                var root: Grids.IGridHierarchyItem[] = [
-                    { id: "001", name: "Baking" },
-                    {
-                        id: "002", name: "Beverages", children: [
-                            { id: "003", name: "Coffee" },
-                            {
-                                id: "004", name: "Tea", collapsed: true, children: [
-                                    { id: "005", name: "Green Tea" },
-                                    { id: "006", name: "Black Tea" },
-                                    { id: "007", name: "Herbal Tea" },
-                                    { id: "008", name: "Fruit Tea" },
-                                    { id: "009", name: "Decaffeinated" }
-                                ]
-                            },
-                            { id: "010", name: "Water" },
-                            { id: "011", name: "Hot Cocoa" },
-                            {
-                                id: "012", name: "Sports & Energy Drinks", children: [
-                                    { id: "013", name: "Liquids" },
-                                    { id: "014", name: "Energy" },
-                                    { id: "015", name: "Specialty" },
-                                    { id: "016", name: "Other" }
-                                ]
-                            },
-                            { id: "017", name: "Soft Drinks" }
-                        ]
-                    },
-                    { id: "018", name: "Frozen Foods" },
-                    { id: "019", name: "Candy" }
-                ];
-
-
-      
-                var gridOptions: Grids.IGridOptions = {
-                    height: "600px",
-                    width: "450px",
-                    columns: [
-                        { text: "Id", index: "id", width: 60 },
-                        { text: "Product Name", index: "name", width: 200, indent: true }
-                    ]
-                };
-                
-                var myGrid = Controls.create(Grids.Grid, $("#grid-container"), gridOptions);
-
-                var dataSource = new Grids.GridHierarchySource(root);
-                myGrid.setDataSource(dataSource);
-
-
-
-
+            
 
                 var ctra = new MyCommon.CustomTestRunAttachment(build);
                 ctra.getTestRunsAttachment((ab) => {
@@ -264,26 +226,33 @@ export class InfoTab extends Controls.BaseControl {
 
                     $('#roberts-info-container').text(inf);
 
-                    //openCoverResult.$trackedModules.each( (ix, module) => {
-                    //    var name = $(module).find("ModuleName").text();
-                    //    var bc = $(module).find("Summary").attr("branchCoverage");
-                    //    var sc = $(module).find("Summary").attr("sequenceCoverage");
-                    //    dataSource.push({ modname: name, seqCov: sc, brCov: bc  });
-                    //});
+                    var root: Grids.IGridHierarchyItem[] = []
 
-                    //dataSource.push({ modname: "---", value: "-vvv--" });
+                    openCoverResult.$trackedModules.each((ix, mod) => {
+                        var modname = $(mod).find("ModuleName").first().text();
+                        var modline :Grids.IGridHierarchyItem = { restype: "module", name: modname, children: []}
+                        root.push(modline);
 
-                  
-                    //dataSource.push({
-                    //    modname: "---", seqCov: "seq Cov", brCov: " br cov",
-                    //    children: child
-                    //});
+                        var classes = $(mod).find("Class").each((cix, cls) => {
+                            var clsname = $(cls).find("FullName").first().text();
+                            var classline: Grids.IGridHierarchyItem = { restype: "class", name: clsname, children: [] }
+                            modline.children.push(classline);
 
+                            var methods = $(cls).find("Method").each((mix, met) => {
+                                var metname = $(met).find("Name").first().text();
+                                var seqCoverage = $(met).find("Summary").first().attr("sequenceCoverage");
 
-                    //myGrid.redraw();
-                    //myGrid.setDataSource(;
-                    
-                    //myGrid.expandAll();
+                                classline.children.push({ restype: "method", name: metname, seqCov: seqCoverage});
+                            });
+
+                        });
+                    });
+                   
+                   
+                    var dataSource = new Grids.GridHierarchySource(root);
+                    myGrid.setDataSource(dataSource);
+
+                   
                 });
             });
         }
