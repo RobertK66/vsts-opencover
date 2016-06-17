@@ -8,7 +8,9 @@ cd BuildResultsEnhancer
 echo Building BuildResultsEnhancer
 call bower install
 call typings install
-call tsc
+set errorlevel=
+call tsc 
+if %errorlevel% neq 0 exit /b %errorlevel%
 cd ..
 echo Building RunOpenCoverTask
 xcopy /S /I .\packages\NUnit.ConsoleRunner.3.2.1  .\RunNunitWithOpenCover\dist\NUnit.ConsoleRunner.3.2.1
