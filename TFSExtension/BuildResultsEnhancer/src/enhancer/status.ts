@@ -23,13 +23,10 @@ export class StatusSection extends Controls.BaseControl {
 			// register your extension with host through callback
 			sharedConfig.onBuildChanged((build: TFS_Build_Contracts.Build) => {
                 var ctra = new MyCommon.CustomTestRunAttachment(build);
-                ctra.getTestRunsAsync((ab) => {
+                ctra.getTestRunsAttachment((ab) => {
                     var ocr = new MyCommon.OpenCoverResult(ab);
-
                     var sc = Number(ocr.sequenceCoverage) * 255 / 100;
                     var bc = Number(ocr.branchCoverage) * 255 / 100;
-
-
 
                     $("#robert-cov-seq").text(ocr.sequenceCoverage + "%").css("background-color", this.rgbToHex(255 - sc, sc, 0));
                     $("#robert-cov-bra").text(ocr.branchCoverage + "%").css("background-color", this.rgbToHex(255 - bc,bc, 0));

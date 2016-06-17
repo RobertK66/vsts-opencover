@@ -60,8 +60,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>
-</PreBuildEvent>
+    <PreBuildEvent>call $(SolutionDir)\Clean.bat $(SolutionDir)</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>call $(SolutionDir)\Build.bat $(SolutionDir)</PostBuildEvent>
