@@ -171,91 +171,134 @@ import MyCommon = require("enhancer/common");
 	 "VSS/WebApi/RestClient" {
 */
 
-
 export class InfoTab extends Controls.BaseControl {
+    viewInitialized: boolean = false;
+    dataRead: boolean = false;
+
+    myGrid: Grids.Grid;
+    gridData: Grids.IGridHierarchyItem[];
+
+
     constructor() {
         super();
     }
 
     public initialize(): void {
         super.initialize();
-
         // Get configuration that's shared between extension and the extension host
         var sharedConfig: TFS_BuildContractsExt.IBuildResultsViewExtensionConfig = VSS.getConfiguration();
 
-
-        var gridOptions: Grids.IGridOptions = {
-            height: "600px",
-            // width: "450px",
-            columns: [
-                { text: "Type", index: "restype", width: 100 , indent: false },
-                { text: "Name", index: "name", width: 500 },
-                { text: "Seq Coverage", index: "seqCov", width: 80 }
-
-            ]
-        };
-
-        var myGrid = Controls.create(Grids.Grid, $("#grid-container"), gridOptions);
-
         if (sharedConfig) {
-            // register your extension with host through callback
+
+            // callback from TFS host
+            sharedConfig.onViewDisplayed(() => {
+                if (!this.viewInitialized) {
+                    // Here we know the size (height!) of our client, so we can create the Grid
+                    var viewheight = document.getElementById("my-root-html").clientHeight;
+
+                    var gridOptions: Grids.IGridOptions = {
+                        height: viewheight + "px",
+                        columns: [
+                            { text: "Type", index: "restype", width: 100, hidden: true },
+                            { text: "Name", index: "name", width: 500, indent: true },
+                            { text: "Coverable", index: "coverable", width: 80, rowCss: "numcolcss", headerCss: "numcolhdr" },
+                            { text: "Covered", index: "covered", width: 80, rowCss: "numcolcss", headerCss: "numcolhdr" },
+                            { text: "Uncovered", index: "uncovered", width: 80, rowCss: "numcolcss", headerCss: "numcolhdr" },
+                            { text: "Line Coverage", index: "seqCov", width: 100, rowCss: "numcolcss", headerCss: "numcolhdr" },
+                            { text: "Branch Coverage", index: "brCov", width: 100, rowCss: "numcolcss", headerCss: "numcolhdr" },
+                            { text: "cycl. Comp.", index: "comp", width: 80, rowCss: "numcolcss", headerCss: "numcolhdr" },
+                            { text: "nPath Comp.", index: "nPath", width: 80, rowCss: "numcolcss", headerCss: "numcolhdr" }
+                        ]
+                    };
+
+                    this.myGrid = Controls.create(Grids.Grid, $("#grid-container"), gridOptions);
+                    this.viewInitialized = true;
+
+                    if (this.dataRead) {
+                        var dataSource = new Grids.GridHierarchySource(this.gridData);
+                        this.myGrid.setDataSource(dataSource);
+                        this.myGrid.redraw();
+                    }
+
+                }
+            });
+
+            // callback from TFS host
             sharedConfig.onBuildChanged((build: TFS_BuildContracts.Build) => {
                 this._initBuildInfo(build);
-
-
-            
 
                 var ctra = new MyCommon.CustomTestRunAttachment(build);
                 ctra.getTestRunsAttachment((ab) => {
                     var openCoverResult = new MyCommon.OpenCoverResult(ab);
 
-                    var inf: string = "";
-                    inf += "Sequence Coverage: " + openCoverResult.sequenceCoverage + "%"
-                        + " (" + openCoverResult.visitedSequencePoints
-                        + "/" + openCoverResult.sequencePoints + ")\n";
-                    inf += "Branch Coverage:   " + openCoverResult.branchCoverage + "%"
-                        + " (" + openCoverResult.visitedBranchPoints
-                        + "/" + openCoverResult.branchPoints + ")\n\n"
-
-                    inf += "Min Cyclomatic Complexity: " + openCoverResult.minCyclomaticComplexity + "\n";
-                    inf += "Max Cyclomatic Complexity: " + openCoverResult.maxCyclomaticComplexity + "\n";
-                    inf += "Classes visited/monitored: " + openCoverResult.visitedClasses
-                        + "/" + openCoverResult.classes + "\n";
-                    inf += "Methods visited/monitored: " + openCoverResult.visitedMethods
-                        + "/" + openCoverResult.methods + "\n";
-
-                    $('#roberts-info-container').text(inf);
-
-                    var root: Grids.IGridHierarchyItem[] = []
+                    // Generate the data structure for the hierachical Grid
+                    this.gridData = [];
 
                     openCoverResult.$trackedModules.each((ix, mod) => {
                         var modname = $(mod).find("ModuleName").first().text();
-                        var modline :Grids.IGridHierarchyItem = { restype: "module", name: modname, children: []}
-                        root.push(modline);
+                        var $sum = $(mod).find("Summary").first();
+                        var uncovered = +$sum.attr("numSequencePoints") - +$sum.attr("visitedSequencePoints");
+
+                        var modline: Grids.IGridHierarchyItem = {
+                            restype: "module", name: modname,
+                            coverable: $sum.attr("numSequencePoints"), covered: $sum.attr("visitedSequencePoints"), uncovered: uncovered,
+                            seqCov: $sum.attr("sequenceCoverage") + "%", brCov: $sum.attr("branchCoverage") + "%",
+                            children: []
+                        }
+
+                        this.gridData.push(modline);
 
                         var classes = $(mod).find("Class").each((cix, cls) => {
                             var clsname = $(cls).find("FullName").first().text();
-                            var classline: Grids.IGridHierarchyItem = { restype: "class", name: clsname, children: [] }
-                            modline.children.push(classline);
+                            var $sum = $(cls).find("Summary").first();
+                            var numSeqPt = $sum.attr("numSequencePoints")
 
-                            var methods = $(cls).find("Method").each((mix, met) => {
-                                var metname = $(met).find("Name").first().text()
-                                var x = metname.indexOf("::");
-                                var y = metname.indexOf("(", x);
+                            if (numSeqPt != "0") {
 
-                                var seqCoverage = $(met).find("Summary").first().attr("sequenceCoverage");
+                                var uncovered = +numSeqPt - +$sum.attr("visitedSequencePoints");
 
-                                classline.children.push({ restype: "method", name: metname.substring(x+2,y), seqCov: seqCoverage});
-                            });
+                                var classline: Grids.IGridHierarchyItem = {
+                                    restype: "class", name: clsname, 
+                                    coverable: numSeqPt, covered: $sum.attr("visitedSequencePoints"), uncovered: uncovered,
+                                    seqCov: $sum.attr("sequenceCoverage") + "%", brCov: $sum.attr("branchCoverage") + "%",
+                                    children: [], collapsed: true
+                                    
+                                }
+                                modline.children.push(classline);
 
-                        });
-                    });
-                   
-                   
-                    var dataSource = new Grids.GridHierarchySource(root);
-                    myGrid.setDataSource(dataSource);
+                                var methods = $(cls).find("Method").each((mix, met) => {
+                                    var $sum = $(met).find("Summary").first();
+                                    var numSeqPt = $sum.attr("numSequencePoints")
 
-                   
+                                    if (numSeqPt != "0") {
+                                        var metname = $(met).find("Name").first().text()
+                                        var x = metname.indexOf("::");
+                                        var y = metname.indexOf("(", x);
+                                        metname = metname.substring(x + 2, y);
+
+                                        var uncovered = +numSeqPt - +$sum.attr("visitedSequencePoints");
+
+                                        classline.children.push({
+                                            restype: "method", name: metname, 
+                                            coverable: numSeqPt, covered: $sum.attr("visitedSequencePoints"), uncovered: uncovered,
+                                            seqCov: $sum.attr("sequenceCoverage") + "%", brCov: $sum.attr("branchCoverage") + "%",
+                                            comp: $(met).attr("cyclomaticComplexity"), nPath: $(met).attr("nPathComplexity")
+                                        });
+                                    }
+                                });
+                            }  // endif class - coverable
+                                   
+                            }); // loop classes
+
+                        }); // loop modules
+                    
+                    
+                    this.dataRead = true;
+                    if (this.viewInitialized) {
+                        var dataSource = new Grids.GridHierarchySource(this.gridData);
+                        this.myGrid.setDataSource(dataSource);
+                        this.myGrid.redraw();
+                    }
                 });
             });
         }

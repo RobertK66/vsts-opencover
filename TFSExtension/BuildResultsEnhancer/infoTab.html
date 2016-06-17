@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html  style="overflow:scroll">
+<html id="my-root-html">
 <head>
     <script src="bower_components/vss-web-extension-sdk/lib/VSS.SDK.min.js"></script>
     
@@ -18,17 +18,17 @@
     </script>
     
     <style>
-    .build-info {
-        padding: 10px;
-        
-    }     
+    .grid-cell.numcolcss {
+        text-align: right;
+    }   
+    .grid-header-column .title.numcolhdr {
+        text-align: right;
+    }    
     </style>
 </head>
 
-<body >
-    <div class="build-info">
-        <pre id="roberts-info-container"></pre>
-        <div id="grid-container"></div>
+<body>
+    <div class="build-info" id="grid-container">
     </div>
 </body>
 </html>
