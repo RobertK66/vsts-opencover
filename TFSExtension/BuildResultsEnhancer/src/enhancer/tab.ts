@@ -188,8 +188,8 @@ export class InfoTab extends Controls.BaseControl {
             height: "600px",
             // width: "450px",
             columns: [
-                { text: "Type", index: "restype", width: 60 },
-                { text: "Name", index: "name", width: 300 },
+                { text: "Type", index: "restype", width: 100 , indent: false },
+                { text: "Name", index: "name", width: 500 },
                 { text: "Seq Coverage", index: "seqCov", width: 80 }
 
             ]
@@ -239,10 +239,13 @@ export class InfoTab extends Controls.BaseControl {
                             modline.children.push(classline);
 
                             var methods = $(cls).find("Method").each((mix, met) => {
-                                var metname = $(met).find("Name").first().text();
+                                var metname = $(met).find("Name").first().text()
+                                var x = metname.indexOf("::");
+                                var y = metname.indexOf("(", x);
+
                                 var seqCoverage = $(met).find("Summary").first().attr("sequenceCoverage");
 
-                                classline.children.push({ restype: "method", name: metname, seqCov: seqCoverage});
+                                classline.children.push({ restype: "method", name: metname.substring(x+2,y), seqCov: seqCoverage});
                             });
 
                         });
