@@ -18,6 +18,7 @@ The toolchain for building this Extensions consists of <br>
 	* npm 3.9.0
 	* bower 1.7.9
 	* typings 0.8.1
+	* tfx 0.3.20
 
 ### Building 
 
