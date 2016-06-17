@@ -1,5 +1,5 @@
 # vsts-opencover
-vsts extension to run and report coverage using nunit3 and OpenCover
+vsts extension to run and report coverage using nunit3 on TFS 2015 and OpenCover
 
 ![buildresultssummary](https://cloud.githubusercontent.com/assets/16986510/16158215/9121d88c-34bc-11e6-8514-981edcf0581c.png)
 
