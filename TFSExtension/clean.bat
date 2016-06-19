@@ -7,5 +7,7 @@ rd /S /Q RunNunitWithOpenCover\dist
 rd /S /Q BuildResultsEnhancer\dist
 rd /S /Q BuildResultsEnhancer\typings
 rd /S /Q BuildResultsEnhancer\bower_components
-
+echo script ignores errorlevel for the case there was nothing there to delete!
+echo If something is stuck you have to check for this manually.
+exit /b 0
 
