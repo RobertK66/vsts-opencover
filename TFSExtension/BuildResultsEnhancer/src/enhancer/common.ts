@@ -23,7 +23,8 @@ export class OpenCoverResult extends Object {
     constructor(buffer: ArrayBuffer) {
         super();
 
-        var cont = String.fromCharCode.apply(null, new Uint8Array(buffer));
+       // var cont = String.fromCharCode.apply(null, new Uint8Array(buffer));
+        var cont = this.Uint8ToString(new Uint8Array(buffer));
         this.resdoc = $.parseXML(cont);
         var $xml = $(this.resdoc);
         var $Summary = $xml.find("Summary");
@@ -45,11 +46,15 @@ export class OpenCoverResult extends Object {
         this.$trackedModules = $xml.find("Module").not("[skippedDueTo]");
     }
 
-    public doSomethingElse(): string {
-        return "Hallo It's me. An Object Child";
+    public Uint8ToString(u8a: Uint8Array) :string {
+        var CHUNK_SZ = 0x8000;
+        var c = [];
+        for (var i = 0; i < u8a.length; i += CHUNK_SZ) {
+            c.push(String.fromCharCode.apply(null, u8a.subarray(i, i + CHUNK_SZ)));
+        }
+        return c.join("");
     }
-
-
+    
 
 }
 

@@ -46,22 +46,26 @@ $nunitprojectroot = ""
 $nunitproject = "<NUnitProject>
   <Settings activeconfig=""Debug""/>
   <Config name=""Debug"">"
+  
+$filelist = ""
+  
 foreach ($testfile in $testAssemblyFiles) {
 	if (!$nunitprojectroot) {
 		$nunitprojectroot = split-path $testfile
 	}
 	$nunitproject = $nunitproject +  "<assembly path=""$testfile""/>"	 
+	$filelist = $filelist + """""$testfile"""" "
 }
 $nunitproject = $nunitproject + "
   </Config>
 </NUnitProject>"
 
-Write-Host "Generating nunit project file at $nunitprojectroot with content: $nunitproject"
-$nunitproject | Out-File $nunitprojectroot\project.nunit
+#Write-Host "Generating nunit project file at $nunitprojectroot with content: $nunitproject"
+#$nunitproject | Out-File $nunitprojectroot\project.nunit
 
 $cmd = ".\${ocToolPath}\OpenCover.Console.exe"
 $arg1 = "-target:"".\$nuToolPath\nunit3-console.exe"""
-$arg2 = "-targetargs:""$nunitprojectroot\project.nunit --work=$outputPath"""
+$arg2 = "-targetargs:""$filelist --work=$outputPath"""
 $arg3 = "-filter:""$coverageFilter"""
 $arg4 = "-register:$registerOption"
 $arg5 = "-coverbytest:*"
@@ -97,8 +101,3 @@ Write-Host "Executing:'& $cmd $arg1 $arg2 $arg3 $arg4 $arg5 $arg6' "
 & $cmd $arg1 $arg2 $arg3 $arg4 $arg5 $arg6 
 
 Write-Host "RunOpenCover.ps1 finished."
-
-
-
-
-
