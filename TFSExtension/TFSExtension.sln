@@ -18,6 +18,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RunNunitWithOpenCover", "RunNunitWithOpenCover", "{1BC2C287-01A6-41D4-88D9-8D9049047ADC}"
 	ProjectSection(SolutionItems) = preProject
 		RunNunitWithOpenCover\icon.png = RunNunitWithOpenCover\icon.png
+		RunNunitWithOpenCover\nunit3-junit.xslt = RunNunitWithOpenCover\nunit3-junit.xslt
 		RunNunitWithOpenCover\ResultDummy.xml = RunNunitWithOpenCover\ResultDummy.xml
 		RunNunitWithOpenCover\RunOpenCover.ps1 = RunNunitWithOpenCover\RunOpenCover.ps1
 		RunNunitWithOpenCover\task.json = RunNunitWithOpenCover\task.json

@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "coverage-build-tasks",
   "name": "RKOS Build Tools",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "RKOS",
   "targets": [
     {
