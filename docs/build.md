@@ -12,7 +12,7 @@ The toolchain for building this Extensions consists of <br>
 	* d. TypeScript 1.7 or higher (`npm install -g typescript`) 
 	* e. [Team Foundation command line interface](https://github.com/Microsoft/tfs-cli)(`npm install -g tfx-cli`) 
 
-* The versions used for building 0.0.3 are: 
+* The versions used for building 0.0.4 are: 
 	* Vs2015-Update3 (including TypeScript tools for Visual Studio  1.8.34.0)
 	* node v4.4.4
 	* npm 3.9.0
