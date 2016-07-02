@@ -14,8 +14,9 @@ export class StatusSection extends Controls.BaseControl {
 		
 	public initialize(): void {
         super.initialize();
+
+
         
-    
 		// Get configuration that's shared between extension and the extension host
         var sharedConfig: TFS_Build_Extension_Contracts.IBuildResultsViewExtensionConfig = VSS.getConfiguration();
         
