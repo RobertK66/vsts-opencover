@@ -9,7 +9,7 @@ param (
 )
 
 $ocToolPath = "dist\OpenCover.4.6.519\tools"
-$nuToolPath = "dist\NUnit.ConsoleRunner.3.2.1\tools"
+$nuToolPath = "dist\NUnit.ConsoleRunner.3.4.1\tools"
 $rgToolPath = "dist\ReportGenerator.2.4.5.0\tools"
 $restHelperPath = "dist\RestHelper"
 
@@ -65,7 +65,7 @@ $nunitproject = $nunitproject + "
 
 $cmd = ".\${ocToolPath}\OpenCover.Console.exe"
 $arg1 = "-target:"".\$nuToolPath\nunit3-console.exe"""
-$arg2 = "-targetargs:""$filelist --work=$outputPath"""
+$arg2 = "-targetargs:""$filelist --work=$outputPath --result=junit-results.xml;transform=.\dist\nunit3-junit.xslt"""
 $arg3 = "-filter:""$coverageFilter"""
 $arg4 = "-register:$registerOption"
 $arg5 = "-coverbytest:*"
@@ -85,9 +85,12 @@ if ($generateReport -eq "true") {
 
 Publish-BuildArtifact "OpenCoverResult" $outputPath
 
-$exampleResult = Resolve-Path ".\dist\ResultDummy.xml"
+#the result file (from XSLT in Nunit call) is not UTF8 encoded :-( -> we have to do this here in en extra step!
+Get-Content $outputPath\junit-results.xml | Set-Content -Encoding utf8 $outputPath\junit-results-utf8.xml
+
+$testResult = Resolve-Path "$outputPath\junit-results-utf8.xml"
 $RunTitle = "OpenCover_TestRun_$env:BUILD_BUILDNUMBER"
-Publish-TestResults -TestRunner "NUnit" -TestResultsFiles $exampleResult -MergeResults $true -Context $distributedTaskContext -PublishRunLevelAttachments $true -RunTitle $RunTitle
+Publish-TestResults -TestRunner "JUnit" -TestResultsFiles $testResult -MergeResults $true -Context $distributedTaskContext -PublishRunLevelAttachments $true -RunTitle $RunTitle
 
 $cmd = ".\${restHelperPath}\TFSRestTool.exe"
 $arg1 = "$env:SYSTEM_TEAMFOUNDATIONSERVERURI$env:SYSTEM_TEAMPROJECTID/"
