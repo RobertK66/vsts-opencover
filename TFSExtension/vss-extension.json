@@ -17,6 +17,16 @@
   "icons": {
     "default": "extension-icon128.png"
   },
+  "links": {
+    "learn": {
+      "uri": "https://github.com/RobertK66/vsts-opencover"
+    }
+  },
+  "content": {
+    "details": {
+      "path": "details.md"
+    }
+  },
   "files": [
     {
       "path": "RunNunitWithOpenCover/dist"

@@ -9,7 +9,7 @@ param (
 )
 
 $ocToolPath = "dist\OpenCover.4.6.519\tools"
-$nuToolPath = "dist\NUnit.ConsoleRunner.3.2.1\tools"
+$nuToolPath = "dist\NUnit.ConsoleRunner.3.4.1\tools"
 $rgToolPath = "dist\ReportGenerator.2.4.5.0\tools"
 $restHelperPath = "dist\RestHelper"
 

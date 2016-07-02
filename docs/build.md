@@ -13,7 +13,7 @@ The toolchain for building this Extensions consists of <br>
 	* e. [Team Foundation command line interface](https://github.com/Microsoft/tfs-cli)(`npm install -g tfx-cli`) 
 
 * The versions used for building 0.0.3 are: 
-	* Vs2015-Update2 (including TypeScript tools for Visual Studio  1.8.29.0)
+	* Vs2015-Update3 (including TypeScript tools for Visual Studio  1.8.34.0)
 	* node v4.4.4
 	* npm 3.9.0
 	* bower 1.7.9
